@@ -10,5 +10,14 @@
     "skipLibCheck": true
   },
   "include": ["src"],
-  "exclude": ["node_modules", "**/*.spec.ts"]
+  "exclude": [
+    "node_modules",
+    "**/*.spec.ts",
+    "src/cloud-api/gemini-llm.ts",
+    "src/cloud-api/gemini.ts",
+    "src/cloud-api/openai.ts",
+    "src/cloud-api/proxy-fetch.ts",
+    "src/config/image-generation.ts",
+    "src/utils/index.ts"
+  ]
 }

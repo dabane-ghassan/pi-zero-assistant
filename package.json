@@ -19,6 +19,11 @@
     "moment": "^2.30.1",
     "mp3-duration": "^1.1.0",
     "node-fetch": "^3.3.2",
+    "@google/genai": "1.25.0",
+    "openai": "^5.12.2",
+    "undici": "^7.16.0",
+    "https-proxy-agent": "^7.0.6",
+    "socks-proxy-agent": "^8.0.5",
     "uuid": "^11.1.0",
     "ws": "^8.18.1",
     "zlib": "^1.0.5"
