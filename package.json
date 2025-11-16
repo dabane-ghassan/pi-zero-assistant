@@ -1,7 +1,8 @@
 {
-  "name": "ai-node",
-  "version": "1.0.0",
-  "main": "index.js",
+  "name": "pi-zero-advent-calendar",
+  "version": "2.0.0",
+  "description": "Offline French Advent Calendar for Raspberry Pi Zero with Whisplay HAT",
+  "main": "dist/index.js",
   "scripts": {
     "build": "rm -rf dist && tsc",
     "start": "node -r ts-node/register/transpile-only -r tsconfig-paths/register dist/index.js",
@@ -9,22 +10,15 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
-  "license": "ISC",
-  "description": "",
+  "license": "GPL-3.0",
   "dependencies": {
-    "@google-cloud/text-to-speech": "^6.3.1",
-    "@google/genai": "1.25.0",
     "axios": "^1.8.4",
     "crypto": "^1.0.1",
     "dotenv": "^16.5.0",
-    "https-proxy-agent": "^7.0.6",
     "lodash": "^4.17.21",
     "moment": "^2.30.1",
     "mp3-duration": "^1.1.0",
     "node-fetch": "^3.3.2",
-    "openai": "^5.12.2",
-    "socks-proxy-agent": "^8.0.5",
-    "undici": "^7.16.0",
     "uuid": "^11.1.0",
     "ws": "^8.18.1",
     "zlib": "^1.0.5"

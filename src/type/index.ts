@@ -19,6 +19,7 @@ export enum ASRServer {
   gemini = "gemini",
   vosk = "vosk",
   whisper = "whisper",
+  offline = "offline",
 }
 
 export enum LLMServer {
@@ -26,6 +27,7 @@ export enum LLMServer {
   openai = "openai",
   ollama = "ollama",
   gemini = "gemini",
+  offline = "offline",
 }
 
 export enum TTSServer {

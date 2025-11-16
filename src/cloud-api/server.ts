@@ -10,6 +10,7 @@ import { recognizeAudio as OpenAIASR } from "./openai-asr";
 import { recognizeAudio as GeminiASR } from "./gemini-asr";
 import { recognizeAudio as VoskASR } from "./vosk-asr";
 import { recognizeAudio as WisperASR } from "./whisper-asr";
+import { recognizeAudio as OfflineASR } from "./offline-asr";
 import {
   chatWithLLMStream as VolcengineLLMStream,
   resetChatHistory as VolcengineResetChatHistory,
@@ -26,6 +27,10 @@ import {
   chatWithLLMStream as GeminiLLMStream,
   resetChatHistory as GeminiResetChatHistory,
 } from "./gemini-llm";
+import {
+  chatWithLLMStream as OfflineLLMStream,
+  resetChatHistory as OfflineLLMResetChatHistory,
+} from "./offline-llm";
 import VolcengineTTS from "./volcengine-tts";
 import OpenAITTS from "./openai-tts";
 import geminiTTS from "./gemini-tts";
@@ -80,10 +85,13 @@ switch (asrServer) {
     break;
   case ASRServer.whisper:
     recognizeAudio = WisperASR;
-    break
+    break;
+  case ASRServer.offline:
+    recognizeAudio = OfflineASR;
+    break;
   default:
     console.warn(
-      `unknown asr server: ${asrServer}, should be VOLCENGINE/TENCENT/OPENAI/GEMINI/VOSK/WHISPER`
+      `unknown asr server: ${asrServer}, should be VOLCENGINE/TENCENT/OPENAI/GEMINI/VOSK/WHISPER/OFFLINE`
     );
     break;
 }
@@ -105,9 +113,13 @@ switch (llmServer) {
     chatWithLLMStream = GeminiLLMStream;
     resetChatHistory = GeminiResetChatHistory;
     break;
+  case LLMServer.offline:
+    chatWithLLMStream = OfflineLLMStream;
+    resetChatHistory = OfflineLLMResetChatHistory;
+    break;
   default:
     console.warn(
-      `unknown llm server: ${llmServer}, should be VOLCENGINE/OPENAI/GEMINI/OLLAMA`
+      `unknown llm server: ${llmServer}, should be VOLCENGINE/OPENAI/GEMINI/OLLAMA/OFFLINE`
     );
     break;
 }
