@@ -7,6 +7,7 @@
 import fs from "fs";
 import { exec } from "child_process";
 import { promisify } from "util";
+import path from "path";
 
 const execAsync = promisify(exec);
 
@@ -60,25 +61,50 @@ export const recognizeAudio = async (audioFilePath: string): Promise<string> => 
  */
 const tryPocketSphinx = async (audioFilePath: string): Promise<string> => {
   try {
-    // Convert WAV to RAW if needed
-    const rawFile = audioFilePath.replace(/\.wav$/, ".raw");
+    // Ensure we have a WAV file with the correct sample rate/chan
+    const ext = path.extname(audioFilePath).toLowerCase();
+    let wavFile = audioFilePath;
+    let createdTemp = false;
 
-    try {
-      // Convert using SoX
-      await execAsync(`sox "${audioFilePath}" -r 16000 -b 16 -c 1 "${rawFile}"`);
-    } catch (e) {
-      console.warn("SoX conversion failed:", (e as Error).message);
+    if (ext !== ".wav") {
+      // create a temp wav path next to original
+      wavFile = audioFilePath.replace(/\.[^/.]+$/, ".wav");
+      try {
+        // Prefer ffmpeg, fallback to sox
+        try {
+          await execAsync(`ffmpeg -y -i "${audioFilePath}" -ar 16000 -ac 1 "${wavFile}"`);
+        } catch (ffErr) {
+          // try sox
+          await execAsync(`sox "${audioFilePath}" -r 16000 -b 16 -c 1 "${wavFile}"`);
+        }
+        createdTemp = true;
+      } catch (convErr) {
+        console.warn("Audio conversion to WAV failed:", (convErr as Error).message);
+      }
     }
 
     // Use pocketsphinx for French speech recognition
     try {
-      const { stdout } = await execAsync(
-        `pocketsphinx_continuous -infile "${audioFilePath}" -dict /usr/share/pocketsphinx/model/hmm/fr/fr.dic -lm /usr/share/pocketsphinx/model/lm/fr/fr.lm 2>/dev/null || pocketsphinx_continuous -infile "${audioFilePath}" 2>/dev/null`,
-        { timeout: 30000 }
-      );
-      return stdout.trim().toLowerCase();
+      // Try a simple pocketsphinx invocation; additional model flags can be configured by the user
+      const cmd = `pocketsphinx_continuous -infile "${wavFile}" 2>/dev/null`;
+      const { stdout } = await execAsync(cmd, { timeout: 30000 });
+      const text = stdout.trim().toLowerCase();
+
+      if (createdTemp) {
+        try {
+          fs.unlinkSync(wavFile);
+        } catch {}
+      }
+
+      return text;
     } catch (e) {
       console.warn("Pocketsphinx command failed:", (e as Error).message);
+      // cleanup temp
+      if (createdTemp) {
+        try {
+          fs.unlinkSync(wavFile);
+        } catch {}
+      }
       return "";
     }
   } catch (error) {
