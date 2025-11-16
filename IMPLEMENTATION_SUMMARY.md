@@ -75,9 +75,9 @@ cp .env.advent-calendar .env
 wget https://github.com/rhasspy/piper/releases/download/v1.2.0/piper_arm64.tar.gz
 tar xzf piper_arm64.tar.gz && sudo mv piper /usr/local/bin/
 
-mkdir -p /home/pi/piper/voices
-wget https://huggingface.co/rhasspy/piper-voices/resolve/v1.0.0/fr/fr_FR/maeva/medium/fr_FR-maeva-medium.onnx \
-  -O /home/pi/piper/voices/fr_FR-maeva-medium.onnx
+mkdir -p /home/piassistant/piper/voices
+wget https://huggingface.co/rhasspy/piper-voices/blob/main/fr/fr_FR/gilles/low/fr_FR-gilles-low.onnx \
+  -O /home/piassistant/piper/voices/fr_FR-gilles-low.onnx
 ```
 
 ### Step 3: Build & Run
